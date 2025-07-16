@@ -1,0 +1,38 @@
+# Python
+__pycache__/
+*.py[cod]
+*.so
+
+# Environments
+.venv/
+env/
+venv/
+*.env
+
+# MLflow
+mlruns/
+*.mlmodel
+
+# Models
+models/
+*.pkl
+*.joblib
+*.h5
+
+# DVC
+.dvc/
+*.dvc
+.dvcignore
+
+# Jupyter
+.ipynb_checkpoints/
+
+# Logs
+*.log
+
+# VS Code
+.vscode/
+
+# OS junk
+.DS_Store
+Thumbs.db

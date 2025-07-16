@@ -1,22 +1,23 @@
 stages:
   preprocess:
-    cmd: dvc.yaml python src/preprocess.py data/train.csv data/clean_train.csv
+    cmd: python src/preprocess.py data/train.csv data/clean_train.csv
     deps:
-    - data/train.csv
-    - src/preprocess.py
-    params:
-    - train.random_state
-    - train.test_size
+      - src/preprocess.py
+      - data/train.csv
     outs:
-    - data/clean_train.csv
+      - data/clean_train.csv
+    params:
+      - train.test_size
+      - train.random_state
+
   train:
-    cmd: dvc.yaml python src/train.py data/clean_train.csv models/model.pkl
+    cmd: python src/train.py data/clean_train.csv models/model.pkl
     deps:
-    - data/clean_train.csv
-    - src/train.py
-    params:
-    - train.n_estimators
-    - train.random_state
-    - train.test_size
+      - src/train.py
+      - data/clean_train.csv
     outs:
-    - models/model.pkl
+      - models/model.pkl
+    params:
+      - train.n_estimators
+      - train.random_state
+      - train.test_size

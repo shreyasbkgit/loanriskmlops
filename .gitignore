@@ -20,9 +20,9 @@ models/
 *.h5
 
 # DVC
-.dvc/
-*.dvc
-.dvcignore
+!.dvc/         # allow .dvc folder to be tracked
+*.dvc          # still ignore .dvc pointer files (data files)
+.dvcignore     # okay to ignore this
 
 # Jupyter
 .ipynb_checkpoints/

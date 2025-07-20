@@ -3,15 +3,10 @@ import os
 import sys
 
 def preprocess(input_path, output_path):
-<<<<<<< HEAD
     print(f"Reading from: {input_path}")
     print(f"Will save to: {output_path}")
     
-=======
-    print(f"[ℹ️] Reading from: {input_path}")
-    print(f"[ℹ️] Will save to: {output_path}")
 
->>>>>>> bc29a3b (Final MLOps pipeline with DVC stages and metrics)
     df = pd.read_csv(input_path)
 
     # Drop identifier column

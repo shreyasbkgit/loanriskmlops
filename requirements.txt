@@ -5,3 +5,5 @@ uvicorn[standard]
 flake8
 requests
 mlflow
+evidently==0.4.13
+prometheus_client

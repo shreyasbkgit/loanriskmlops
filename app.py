@@ -1,12 +1,23 @@
-# --- app.py ---
-from fastapi import FastAPI
+from fastapi import FastAPI, Request
 from pydantic import BaseModel
 import joblib
 import pandas as pd
+import time
+
+from prometheus_client import Counter, Histogram, generate_latest, CONTENT_TYPE_LATEST
+from starlette.responses import Response
 
 app = FastAPI()
 model = joblib.load("models/model.pkl")
 
+# Prometheus metrics
+REQUEST_COUNT = Counter(
+    "prediction_requests_total", "Total number of prediction requests"
+)
+
+REQUEST_LATENCY = Histogram(
+    "prediction_request_duration_seconds", "Latency of prediction requests"
+)
 
 class LoanFeatures(BaseModel):
     ApplicantIncome: int
@@ -24,11 +35,21 @@ class LoanFeatures(BaseModel):
     Property_Area_Semiurban: bool
     Property_Area_Urban: bool
 
-
 @app.post("/predict")
 def predict(features: LoanFeatures):
+    start_time = time.time()
+    REQUEST_COUNT.inc()
+
     df = pd.DataFrame([features.dict()])
     df.columns = df.columns.str.replace("_plus", "+")
     df.columns = df.columns.str.replace("_Not_Graduate", "_Not Graduate")
+
     prediction = model.predict(df)
+
+    REQUEST_LATENCY.observe(time.time() - start_time)
+
     return {"Loan Approval Prediction": bool(prediction[0])}
+
+@app.get("/metrics")
+def metrics():
+    return Response(generate_latest(), media_type=CONTENT_TYPE_LATEST)

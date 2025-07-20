@@ -36,3 +36,5 @@ models/
 # OS junk
 .DS_Store
 Thumbs.db
+
+!data/clean_train.csv

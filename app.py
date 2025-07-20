@@ -1,17 +1,15 @@
+# --- app.py ---
 from fastapi import FastAPI
-from pydantic import BaseModel, Field
+from pydantic import BaseModel
 import joblib
 import pandas as pd
 
-# Load model
+app = FastAPI()
 model = joblib.load("models/model.pkl")
 
-# Define FastAPI app
-app = FastAPI()
 
-# Corrected request schema
-class InputData(BaseModel):
-    ApplicantIncome: float
+class LoanFeatures(BaseModel):
+    ApplicantIncome: int
     CoapplicantIncome: float
     LoanAmount: float
     Loan_Amount_Term: float
@@ -20,18 +18,17 @@ class InputData(BaseModel):
     Married_Yes: bool
     Dependents_1: bool
     Dependents_2: bool
-    Dependents_3_plus: bool = Field(..., alias="Dependents_3+")
-    Education_Not_Graduate: bool = Field(..., alias="Education_Not Graduate")
+    Dependents_3_plus: bool
+    Education_Not_Graduate: bool
     Self_Employed_Yes: bool
     Property_Area_Semiurban: bool
     Property_Area_Urban: bool
 
-    class Config:
-        allow_population_by_field_name = True  # allows internal alias usage
 
 @app.post("/predict")
-def predict(data: InputData):
-    print("hi")
-    df = pd.DataFrame([data.dict(by_alias=True)])
+def predict(features: LoanFeatures):
+    df = pd.DataFrame([features.dict()])
+    df.columns = df.columns.str.replace("_plus", "+")
+    df.columns = df.columns.str.replace("_Not_Graduate", "_Not Graduate")
     prediction = model.predict(df)
-    return {"prediction": prediction.tolist()}
+    return {"Loan Approval Prediction": bool(prediction[0])}

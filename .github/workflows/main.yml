@@ -1,5 +1,4 @@
-
-name: CI/CD Pipeline
+name: CI/CD Pipeline (Windows)
 
 on:
   push:
@@ -9,23 +8,23 @@ on:
 
 jobs:
   build:
-    runs-on: ubuntu-latest
+    runs-on: windows-latest
 
     steps:
-    - name: Checkout code
-      uses: actions/checkout@v3
+    - name: 🧾 Checkout code
+      uses: actions/checkout@v4  # ⬅ Updated to latest
 
-    - name: Set up Python
-      uses: actions/setup-python@v4
+    - name:  Set up Python 3.10
+      uses: actions/setup-python@v5  # ⬅️ Updated to latest
       with:
         python-version: 3.10
 
-    - name: Install dependencies
+    - name:  Install dependencies
       run: |
         python -m pip install --upgrade pip
         pip install -r requirements.txt
 
-    - name: Train Model
+    - name:  Train model
       run: |
         python src/train.py data/clean_train.csv models/model.pkl
 
@@ -34,10 +33,10 @@ jobs:
         pip install flake8
         flake8 src app.py
 
-    - name: Run FastAPI app test
+    - name:  Run FastAPI app test
       run: |
-        pip install requests uvicorn
-        uvicorn app:app --host 0.0.0.0 --port 8000 &
-        sleep 5
+        pip install uvicorn[standard] requests
+        start /B uvicorn app:app --host 127.0.0.1 --port 8000
+        timeout /T 10
         python test_predict.py
-        pkill uvicorn
+        taskkill /F /IM uvicorn.exe || echo "uvicorn already exited"

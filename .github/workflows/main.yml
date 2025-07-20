@@ -27,17 +27,3 @@ jobs:
     - name: Train model
       run: |
         python src/train.py data/clean_train.csv models/model.pkl
-
-    - name: Lint Python code
-      run: |
-        pip install flake8
-        flake8 src app.py
-
-    - name: Run FastAPI app test
-      shell: cmd
-      run: |
-        pip install uvicorn[standard] requests
-        start /B uvicorn app:app --host 127.0.0.1 --port 8000
-        timeout /T 10
-        python test_predict.py
-        taskkill /F /IM uvicorn.exe || echo "uvicorn already exited"

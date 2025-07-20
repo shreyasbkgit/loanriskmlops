@@ -37,7 +37,7 @@ def train_model(data_path, model_path):
         mlflow.log_params(params)
         mlflow.sklearn.log_model(clf, "loan_model")
 
-    print(f"[✔️] Model trained and saved to {model_path}")
+    print(f"Model trained and saved to {model_path}")
 
 if __name__ == "__main__":
     train_model(sys.argv[1], sys.argv[2])

@@ -9,8 +9,13 @@ stages:
       size: 38013
     - path: src/preprocess.py
       hash: md5
+<<<<<<< HEAD
       md5: 8b1ec4a558e3ed09459d33a7d5edf595
       size: 1149
+=======
+      md5: 4793bef56155156c93a378b1d4574648
+      size: 1115
+>>>>>>> bc29a3b (Final MLOps pipeline with DVC stages and metrics)
     params:
       params.yaml:
         train.random_state: 42
@@ -29,8 +34,13 @@ stages:
       size: 51736
     - path: src/train.py
       hash: md5
+<<<<<<< HEAD
       md5: 70e33e7e9cddc350ca63ce9e37473084
       size: 1224
+=======
+      md5: a76b09669167e85e67b8b19870b04e04
+      size: 1186
+>>>>>>> bc29a3b (Final MLOps pipeline with DVC stages and metrics)
     params:
       params.yaml:
         train.n_estimators: 100

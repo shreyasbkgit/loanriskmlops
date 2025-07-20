@@ -31,6 +31,7 @@ class InputData(BaseModel):
 
 @app.post("/predict")
 def predict(data: InputData):
+    print("hi")
     df = pd.DataFrame([data.dict(by_alias=True)])
     prediction = model.predict(df)
     return {"prediction": prediction.tolist()}

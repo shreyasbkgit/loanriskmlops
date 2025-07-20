@@ -1,8 +1,11 @@
+# src/train.py
+
 import pandas as pd
 import sys
 import joblib
 import mlflow
 import yaml
+import os
 from sklearn.ensemble import RandomForestClassifier
 from sklearn.model_selection import train_test_split
 
@@ -12,6 +15,9 @@ def load_params():
 
 def train_model(data_path, model_path):
     params = load_params()["train"]
+
+    # ✅ Ensure model directory exists
+    os.makedirs(os.path.dirname(model_path), exist_ok=True)
 
     df = pd.read_csv(data_path)
     X = df.drop("Loan_Status_Y", axis=1)
@@ -31,7 +37,7 @@ def train_model(data_path, model_path):
         mlflow.log_params(params)
         mlflow.sklearn.log_model(clf, "loan_model")
 
-    print(f"[✅] Model trained and saved to {model_path}")
+    print(f"[✔️] Model trained and saved to {model_path}")
 
 if __name__ == "__main__":
     train_model(sys.argv[1], sys.argv[2])
